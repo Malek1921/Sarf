@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CustomersList from "../components/CustomersList";
 import AddCustomer from "../components/AddCustomer";
-import EditCustomer from "../components/editCustomer";
+import EditCustomer from "../components/EditCustomer";
 
 function Customers() {
   const [activeTab, setActiveTab] = useState("list");
