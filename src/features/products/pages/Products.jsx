@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProductsList from "../components/ProductsList";
-import AddProduct from "../components/AddProduct";
-import EditProduct from "../components/EditProduct";
+import AddProduct from "../components/addProducts/AddProduct";
+import EditProduct from "../components/editProduct/EditProduct";
 
 function Products() {
   const [activeTab, setActiveTab] = useState("list");
@@ -44,10 +44,9 @@ function TabButton({ label, active, onClick }) {
       className={`
         px-4 py-2 text-sm font-semibold
         border-b-2 transition
-        ${
-          active
-            ? "border-black text-black"
-            : "border-transparent text-gray-500 hover:text-black"
+        ${active
+          ? "border-black text-black"
+          : "border-transparent text-gray-500 hover:text-black"
         }
       `}
     >
