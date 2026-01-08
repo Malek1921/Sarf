@@ -1,4 +1,4 @@
-import { BrowserRouter, useLocation } from "react-router";
+import { BrowserRouter } from "react-router";
 import ProjectRoutes from "./features/routes/ProjectRoutes";
 import Header from "./features/shared/Header";
 import { ToastContainer } from "react-toastify";
