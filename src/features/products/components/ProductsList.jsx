@@ -20,7 +20,7 @@ function ProductsList() {
 
   return (
     <div className="min-h-screen bg-linear-to-br p-8 text-slate-100">
-      <h2 className="text-2xl font-semibold mb-6">Product Inventory</h2>
+      <h2 className="text-2xl text-black font-semibold mb-6">Product Inventory</h2>
 
       <div className="flex flex-wrap gap-4 mb-8">
         <input
