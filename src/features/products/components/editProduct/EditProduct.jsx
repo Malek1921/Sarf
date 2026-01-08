@@ -7,17 +7,14 @@ function EditProduct() {
   return (
     <>
       <div className='h-full p-10 grid grid-cols-3 grid-rows-4'>
-        <Inputes label={'Product ID'} />
         <Inputes label={'Name'} />
         <Inputes label={'Categary'} />
         <Inputes label={'Discribtion'} />
         <Inputes label={'Purchase Price'} />
-        <Inputes label={'Safe Price'} />
         <Inputes label={'Stock Quantity'} />
         <Inputes label={'Unit'} />
+        <i></i>
         <ImageBar label={'Image'} />
-        <Inputes label={'Entru Date'} />
-        <Inputes label={'Expire Date'} />
       </div>
       <div className='w-full flex justify-end pr-12 pb-5 gap-4'>
         <Button innerText={'Edit Product'} bStyle={'bg-gray-100 text-black hover:bg-gray-200'} />

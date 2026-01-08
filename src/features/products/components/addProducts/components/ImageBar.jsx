@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { HiArrowUpRight } from "react-icons/hi2";
 
-function ImageBar({ label }) {
-    const [imageSrc, setImageSrc] = useState(
-        "./DefaultProductImage.png"
-    );
+function ImageBar({ label, value, setInputValue }) {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const newUrl = URL.createObjectURL(file);
-            setImageSrc(newUrl);
+            setInputValue(prev => ({ ...prev, [label.toLowerCase()]: newUrl }) );
         }
     };
 
@@ -19,7 +16,7 @@ function ImageBar({ label }) {
             <label className="font-bold text-black">{label}</label>
             <div className="relative h-34 mb-2 overflow-hidden row-span-2 rounded w-full border border-gray-400 group">
                 <img
-                    src={imageSrc}
+                    src={value}
                     alt="Product Image"
                     className="w-full h-full object-cover"
                 />
