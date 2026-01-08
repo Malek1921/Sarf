@@ -14,11 +14,15 @@ function EditCustomer({ setActiveTab, customer }) {
       c.id == customer.id ? { ...c, ...data } : c
     );
     setCustomers(updated);
-    toast.success(`Customer "${data.fullname}" updated successfully!`);
-    setActiveTab("list"); 
+    toast.success(
+      `Customer "${data.name} ${data.lastname}" updated successfully!`
+    );
+    setActiveTab("list");
   };
 
-  const cancel = () => setActiveTab("list");
+  const cancel = () => {
+    setActiveTab("list");
+  };
 
   if (!customer) return <p className="text-gray-500">No customer selected.</p>;
 
@@ -31,10 +35,20 @@ function EditCustomer({ setActiveTab, customer }) {
       <form onSubmit={handleSubmit(submit)} className="space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
+            Name
           </label>
           <input
-            {...register("fullname")}
+            {...register("name")}
+            type="text"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            lastame
+          </label>
+          <input
+            {...register("lastname")}
             type="text"
             className="w-full px-4 py-2 border rounded-lg"
           />

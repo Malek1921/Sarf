@@ -4,21 +4,32 @@ import useCustomers from "../../store/useCustomers";
 import { toast } from "react-toastify";
 
 function AddCustomer({ setActiveTab }) {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
   const { customers, setCustomers } = useCustomers();
 
   const submit = (data) => {
     const newCustomer = {
       ...data,
-      id: crypto.randomUUID(), 
+      id: Math.floor( Math.random() * 9000), 
     };
+
     setCustomers([...customers, newCustomer]);
-    toast.success(`Customer "${data.fullname}" added successfully!`);
+    toast.success(
+      `Customer "${data.name} ${data.lastname}" added successfully!`
+    );
     reset();
     setActiveTab("list");
   };
 
-  const cancel = () => setActiveTab("list");
+  const cancel = () => {
+    setActiveTab("list");
+  };
 
   return (
     <div className="space-y-6">
@@ -27,50 +38,87 @@ function AddCustomer({ setActiveTab }) {
       </h2>
 
       <form onSubmit={handleSubmit(submit)} className="space-y-5">
+        {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
+            Name
           </label>
           <input
-            {...register("fullname")}
+            {...register("name", { required: "Name is required" })}
             type="text"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+          )}
         </div>
 
+        {/* Lastname */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Lastname
+          </label>
+          <input
+            {...register("lastname", { required: "Lastname is required" })}
+            type="text"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          {errors.lastname && (
+            <p className="text-red-500 text-sm mt-1">{errors.lastname.message}</p>
+          )}
+        </div>
+
+        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Email Address
           </label>
           <input
-            {...register("email")}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                message: "Invalid email format",
+              },
+            })}
             type="email"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
         </div>
 
+        {/* Phone */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number
           </label>
           <input
-            {...register("phone")}
+            {...register("phone", { required: "Phone number is required" })}
             type="tel"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+          )}
         </div>
 
+        {/* Address */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Address
           </label>
           <textarea
-            {...register("address")}
+            {...register("address", { required: "Address is required" })}
             rows="3"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.address && (
+            <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
+          )}
         </div>
 
+        {/* Buttons */}
         <div className="flex gap-4">
           <button
             type="submit"
