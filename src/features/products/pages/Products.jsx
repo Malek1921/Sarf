@@ -28,11 +28,22 @@ function Products() {
       </div>
 
       {/* Content */}
-      <div className="bg-white rounded-xl shadow p-6">
-        {activeTab === "list" && <ProductsList />}
-        {activeTab === "add" && <AddProduct />}
-        {activeTab === "edit" && <EditProduct />}
-      </div>
+      {activeTab === "list" && (
+        
+        <ProductsList />
+      )}
+
+      {activeTab === "add" && (
+        <div className="bg-white rounded-xl shadow p-6">
+          <AddProduct />
+        </div>
+      )}
+
+      {activeTab === "edit" && (
+        <div className="bg-white rounded-xl shadow p-6">
+          <EditProduct />
+        </div>
+      )}
     </div>
   );
 }
@@ -46,8 +57,7 @@ function TabButton({ label, active, onClick }) {
         border-b-2 transition
         ${active
           ? "border-black text-black"
-          : "border-transparent text-gray-500 hover:text-black"
-        }
+          : "border-transparent text-gray-500 hover:text-black"}
       `}
     >
       {label}
