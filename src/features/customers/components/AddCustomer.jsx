@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import useCustomers from "../../store/useCustomers";
 import { toast } from "react-toastify";
@@ -7,83 +7,85 @@ function AddCustomer({ setActiveTab }) {
   const { register, handleSubmit, reset } = useForm();
   const { customers, setCustomers } = useCustomers();
 
- const submit = (data) => {
-  const newCustomer = { ...data };
-  setCustomers([...customers, newCustomer]);
+  const submit = (data) => {
+    const newCustomer = {
+      ...data,
+      id: crypto.randomUUID(), 
+    };
+    setCustomers([...customers, newCustomer]);
+    toast.success(`Customer "${data.fullname}" added successfully!`);
+    reset();
+    setActiveTab("list");
+  };
 
-  toast.success(`Customer "${data.fullname}" added successfully!`);
-  reset();
-
-  // ✅ Switch back to list tab
-  setActiveTab("list");
-};
+  const cancel = () => setActiveTab("list");
 
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-        Add New Customer
+        Add Customer
       </h2>
 
       <form onSubmit={handleSubmit(submit)} className="space-y-5">
-        {/* Full Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Full Name
           </label>
           <input
-            {...register("fullname", { required: "This field is required" })}
+            {...register("fullname")}
             type="text"
-            placeholder="Enter customer name"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
-        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Email Address
           </label>
           <input
-            {...register("email", { required: "This field is required" })}
+            {...register("email")}
             type="email"
-            placeholder="Enter email"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
-        {/* Phone */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number
           </label>
           <input
-            {...register("phone", { required: "This field is required" })}
-            type="number"
-            placeholder="Enter phone number"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            {...register("phone")}
+            type="tel"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
-        {/* Address */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Address
           </label>
           <textarea
-            {...register("address", { required: "This field is required" })}
-            placeholder="Enter address"
+            {...register("address")}
             rows="3"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 transition"
-        >
-          Add Customer
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            className="flex-1 bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 transition"
+          >
+            Add Customer
+          </button>
+          <button
+            type="button"
+            onClick={cancel}
+            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

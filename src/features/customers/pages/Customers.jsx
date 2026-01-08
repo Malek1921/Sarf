@@ -5,7 +5,7 @@ import EditCustomer from "../components/EditCustomer";
 
 function Customers() {
   const [activeTab, setActiveTab] = useState("list");
-  const [editCustomer, setEditCustomer] = useState(null); // track selected customer
+  const [editCustomer, setEditCustomer] = useState(null); 
 
   return (
     <div className="w-full max-w-5xl mx-auto p-6">

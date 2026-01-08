@@ -11,11 +11,11 @@ function EditCustomer({ setActiveTab, customer }) {
 
   const submit = (data) => {
     const updated = customers.map((c) =>
-      c.id === customer.id ? { ...c, ...data } : c
+      c.id == customer.id ? { ...c, ...data } : c
     );
     setCustomers(updated);
     toast.success(`Customer "${data.fullname}" updated successfully!`);
-    setActiveTab("list"); // go back to list
+    setActiveTab("list"); 
   };
 
   const cancel = () => setActiveTab("list");

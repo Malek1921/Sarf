@@ -6,22 +6,24 @@ function CustomersList({ setActiveTab, setEditCustomer }) {
   const { customers, setCustomers } = useCustomers();
 
   const handleDelete = (id) => {
-    const updated = customers.filter((c) => c.id !== id);
+    const updated = customers.filter((c) => c.id !== id); // ✅ exclude the one being deleted
     setCustomers(updated);
     toast.error("Customer deleted successfully!");
   };
 
   const handleEdit = (customer) => {
-    setEditCustomer(customer);   // save selected customer
-    setActiveTab("edit");        // switch to edit tab
+    setEditCustomer(customer);
+    setActiveTab("edit");
     toast.info(`Editing customer "${customer.fullname}"`);
   };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">Customers List</h2>
+      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
+        Customers List
+      </h2>
 
-      {customers.length === 0 ? (
+      {customers.length == 0 ? (
         <p className="text-gray-500">No customers found.</p>
       ) : (
         <div className="overflow-x-auto">
@@ -45,13 +47,17 @@ function CustomersList({ setActiveTab, setEditCustomer }) {
                   <td className="px-4 py-3 border-b text-center">
                     <div className="flex justify-center gap-2">
                       <button
-                        onClick={() => handleEdit(c)}
+                        onClick={() => {
+                          handleEdit(c);
+                        }}
                         className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition"
                       >
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(c.id)}
+                        onClick={() => {
+                          handleDelete(c.id);
+                        }}
                         className="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-red-600 transition"
                       >
                         Delete
