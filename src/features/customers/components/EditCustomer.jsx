@@ -4,20 +4,28 @@ import useCustomers from "../../store/useCustomers";
 import { toast } from "react-toastify";
 
 function EditCustomer({ setActiveTab, customer }) {
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: customer || {},
   });
+
   const { customers, setCustomers } = useCustomers();
 
+  // const submit = (data) => {
+  //   const updated = customers.map((c) =>
+  //     c.id === customer.id ? { ...c, ...data } : c
+  //   );
+  //   setCustomers(updated);
+  //   toast.success(
+  //     `Customer "${data.name} ${data.lastname}" updated successfully!`
+  //   );
+  //   setActiveTab("list");
+  // };
   const submit = (data) => {
-    const updated = customers.map((c) =>
-      c.id == customer.id ? { ...c, ...data } : c
-    );
-    setCustomers(updated);
-    toast.success(
-      `Customer "${data.name} ${data.lastname}" updated successfully!`
-    );
-    setActiveTab("list");
+    console.log(data)
   };
 
   const cancel = () => {
@@ -33,60 +41,88 @@ function EditCustomer({ setActiveTab, customer }) {
       </h2>
 
       <form onSubmit={handleSubmit(submit)} className="space-y-5">
+        {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Name
           </label>
           <input
-            {...register("name")}
+            {...register("name", { required: "Name is required" })}
             type="text"
             className="w-full px-4 py-2 border rounded-lg"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            lastame
-          </label>
-          <input
-            {...register("lastname")}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+          )}
         </div>
 
+        {/* Lastname */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Lastname
+          </label>
+          <input
+            {...register("lastname", { required: "Lastname is required" })}
+            type="text"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          {errors.lastname && (
+            <p className="text-red-500 text-sm mt-1">{errors.lastname.message}</p>
+          )}
+        </div>
+
+        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Email Address
           </label>
           <input
-            {...register("email")}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+              
+                message: "Invalid email format",
+              },
+            })}
             type="email"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
         </div>
 
+        {/* Phone */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number
           </label>
           <input
-            {...register("phone")}
+            {...register("phone", { required: "Phone number is required" })}
             type="tel"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+          )}
         </div>
 
+        {/* Address */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Address
           </label>
           <textarea
-            {...register("address")}
+            {...register("address", { required: "Address is required" })}
             rows="3"
             className="w-full px-4 py-2 border rounded-lg"
           />
+          {errors.address && (
+            <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
+          )}
         </div>
 
+        {/* Buttons */}
         <div className="flex gap-4">
           <button
             type="submit"
