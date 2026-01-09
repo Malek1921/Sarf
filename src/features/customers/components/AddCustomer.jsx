@@ -13,19 +13,23 @@ function AddCustomer({ setActiveTab }) {
 
   const { customers, setCustomers } = useCustomers();
 
-  const submit = (data) => {
-    const newCustomer = {
-      ...data,
-      id: Math.floor( Math.random() * 9000), 
-    };
+  // const submit = (data) => {
+  //   const newCustomer = {
+  //     ...data,
+  //     id: Math.floor( Math.random() * 9000), 
+  //   };
 
-    setCustomers([...customers, newCustomer]);
-    toast.success(
-      `Customer "${data.name} ${data.lastname}" added successfully!`
-    );
-    reset();
-    setActiveTab("list");
-  };
+  //   setCustomers([...customers, newCustomer]);
+  //   toast.success(
+  //     `Customer "${data.name} ${data.lastname}" added successfully!`
+  //   );
+  //   reset();
+  //   setActiveTab("list");
+  // };
+
+  const submit = (data) => {
+    console.log(data)
+  }
 
   const cancel = () => {
     setActiveTab("list");
