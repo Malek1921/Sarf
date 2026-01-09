@@ -14,18 +14,15 @@ function EditCustomer({ setActiveTab, customer }) {
 
   const { customers, setCustomers } = useCustomers();
 
-  // const submit = (data) => {
-  //   const updated = customers.map((c) =>
-  //     c.id === customer.id ? { ...c, ...data } : c
-  //   );
-  //   setCustomers(updated);
-  //   toast.success(
-  //     `Customer "${data.name} ${data.lastname}" updated successfully!`
-  //   );
-  //   setActiveTab("list");
-  // };
   const submit = (data) => {
-    console.log(data)
+    const updated = customers.map((c) =>
+      c.id === customer.id ? { ...c, ...data } : c
+    );
+    setCustomers(updated);
+    toast.success(
+      `Customer "${data.name} ${data.lastname}" updated successfully!`
+    );
+    setActiveTab("list");
   };
 
   const cancel = () => {
@@ -41,6 +38,19 @@ function EditCustomer({ setActiveTab, customer }) {
       </h2>
 
       <form onSubmit={handleSubmit(submit)} className="space-y-5">
+        {/* ID (disabled) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Customer ID
+          </label>
+          <input
+            type="text"
+            value={customer.id}
+            disabled
+            className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+          />
+        </div>
+
         {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -80,7 +90,7 @@ function EditCustomer({ setActiveTab, customer }) {
             {...register("email", {
               required: "Email is required",
               pattern: {
-              
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: "Invalid email format",
               },
             })}
