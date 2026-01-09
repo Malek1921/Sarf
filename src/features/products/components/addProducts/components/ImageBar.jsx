@@ -13,7 +13,7 @@ function ImageBar({ label, value, onChange, className }) {
     return (
         <div className="overflow-hidden pt-2 pl-2 row-span-2 gap-2 flex flex-col pr-2">
             <label className="font-bold text-black">{label}</label>
-            <div className={`relative h-34 mb-2 overflow-hidden row-span-2 rounded w-full border border-gray-400 group ${className || ''}`}>
+            <div className={`relative h-38 mb-2 overflow-hidden row-span-2 rounded w-full border border-gray-400 group ${className || ''}`}>
                 <img src={value} alt="Product Image" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <label className="bg-white text-black p-2 rounded-full cursor-pointer shadow">

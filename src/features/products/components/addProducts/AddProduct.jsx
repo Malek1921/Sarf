@@ -32,7 +32,7 @@ function AddProduct() {
 
     return (
         <form onSubmit={handleSubmit(onValid, onInvalid)}>
-            <div className='h-full p-10 grid grid-cols-3 grid-rows-4 gap-2'>
+            <div className='h-full p-10 grid grid-cols-3 grid-rows-2 gap-2'>
 
                 <div>
                     <Controller
@@ -65,6 +65,34 @@ function AddProduct() {
                     </div>
                 </div>
 
+
+                <Controller
+                    name="image"
+                    control={control}
+                    rules={{ required: "Please select an image." }}
+                    render={({ field }) => (
+                        <ImageBar {...field} label="Image" />
+                    )}
+                />
+
+
+                <div>
+                    <Controller
+                        name="unit"
+                        control={control}
+                        rules={{ required: "This field can't be empty." }}
+                        render={({ field }) => (
+                            <Select {...field} label="Unit" options={[
+                                'Electronic', 'Clouthes', 'Foods', 'Drinks', 'Shoes'
+                            ]} />
+                        )}
+                    />
+                    <div className="h-4">
+                        {errors.unit && <p className="text-red-500 pl-3 text-xs">{errors.unit.message}</p>}
+                    </div>
+                </div>
+
+
                 <div>
                     <Controller
                         name="discribtion"
@@ -76,59 +104,7 @@ function AddProduct() {
                     <div className="h-4"></div>
                 </div>
 
-                <div>
-                    <Controller
-                        name="purchase_price"
-                        control={control}
-                        rules={{ required: "This field can't be empty." }}
-                        render={({ field }) => (
-                            <Inputes {...field} type={'number'} label="Purchase_Price" placeholder="Product Price.."
-                                className={errors.purchase_price ? "border-red-500  focus:border-red-600" : ""} />
-                        )}
-                    />
-                    <div className="h-4">
-                        {errors.purchase_price && <p className="text-red-500 pl-3 text-xs">{errors.purchase_price.message}</p>}
-                    </div>
-                </div>
 
-                <div>
-                    <Controller
-                        name="stock_quantity"
-                        control={control}
-                        rules={{ required: "This field can't be empty." }}
-                        render={({ field }) => (
-                            <Inputes {...field} type={'number'} label="Stock_Quantity" placeholder="Product Quantity.."
-                                className={errors.stock_quantity ? "border-red-500  focus:border-red-600" : ""} />
-                        )}
-                    />
-                    <div className="h-4">
-                        {errors.stock_quantity && <p className="text-red-500 pl-3 text-xs">{errors.stock_quantity.message}</p>}
-                    </div>
-                </div>
-
-                <div>
-                    <Controller
-                        name="unit"
-                        control={control}
-                        render={({ field }) => (
-                            <Select {...field} label="Unit" options={[
-                                'Electronic', 'Clouthes', 'Foods', 'Drinks', 'Shoes'
-                            ]} />
-                        )}
-                    />
-                    <div className="h-4"></div>
-                </div>
-
-                <i></i>
-
-                <Controller
-                    name="image"
-                    control={control}
-                    rules={{ required: "Please select an image." }}
-                    render={({ field }) => (
-                        <ImageBar {...field} label="Image" />
-                    )}
-                />
             </div>
 
             <div className='w-full flex justify-end pr-12 pb-5 gap-4'>
