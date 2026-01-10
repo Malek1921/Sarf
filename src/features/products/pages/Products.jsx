@@ -28,11 +28,19 @@ function Products() {
       </div>
 
       {/* Content */}
-      <div className="bg-white rounded-xl shadow p-6">
-        {activeTab === "list" && <ProductsList />}
-        {activeTab === "add" && <AddProduct />}
-        {activeTab === "edit" && <EditProduct />}
-      </div>
+      {activeTab === "list" && <ProductsList />}
+
+      {activeTab === "add" && (
+        <div className="bg-white rounded-xl shadow p-6">
+          <AddProduct />
+        </div>
+      )}
+
+      {activeTab === "edit" && (
+        <div className="bg-white rounded-xl shadow p-6">
+          <EditProduct />
+        </div>
+      )}
     </div>
   );
 }
