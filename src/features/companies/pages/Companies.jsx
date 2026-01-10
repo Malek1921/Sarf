@@ -1,9 +1,9 @@
 import { useState } from "react";
-import CompaniesList from "../components/CompaniesList";
-import AddCompany from "../components/AddCompany";
-import EditCompany from "../components/EditCompany";
+import CompaniesList from "../CompaniesList";
+import AddCompany from "../AddCompany";
+import EditCompany from "../../dashboard/EditCompany";
 
-function Companies() {
+function Dashboard() {
   const [activeTab, setActiveTab] = useState("list");
 
   return (
@@ -11,7 +11,7 @@ function Companies() {
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b">
         <TabButton
-          label="Companies List"
+          label="Dashboard List"
           active={activeTab === "list"}
           onClick={() => setActiveTab("list")}
         />
@@ -56,4 +56,4 @@ function TabButton({ label, active, onClick }) {
   );
 }
 
-export default Companies;
+export default Dashboard;
