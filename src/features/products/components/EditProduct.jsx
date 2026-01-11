@@ -1,27 +1,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useCustomers from "../../store/useCustomers";
 import { toast } from "react-toastify";
 
-function EditProduct({ setActiveTab, customer }) {
+function EditProduct({ setActiveTab }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: customer || {},
-  });
-
-  const { customers, setCustomers } = useCustomers();
+  } = useForm();
 
   const submit = (data) => {
-    const updated = customers.map((c) =>
-      c.id === customer.id ? { ...c, ...data } : c
-    );
-    setCustomers(updated);
-    toast.success(
-      `Customer "${data.name} ${data.lastname}" updated successfully!`
-    );
+    console.log("Submitted product:", data);
+    toast.success(`Product "${data.name}" updated successfully!`);
+    reset();
     setActiveTab("list");
   };
 
@@ -29,126 +21,113 @@ function EditProduct({ setActiveTab, customer }) {
     setActiveTab("list");
   };
 
-  if (!customer) return <p className="text-gray-500">No customer selected.</p>;
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-        Edit Customer
-      </h2>
-
-      <form onSubmit={handleSubmit(submit)} className="space-y-5">
-        {/* ID (disabled) */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Customer ID
-          </label>
-          <input
-            type="text"
-            value={customer.id}
-            disabled
-            className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
-          />
+    <div className="w-full px-6 py-10">
+      <div className="max-w-full mx-auto">
+        {/* Header */}
+        <div className="mb-10 border-b border-slate-200 pb-6">
+          <h2 className="text-3xl font-bold text-slate-800">Edit Product</h2>
         </div>
 
-        {/* Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Name
-          </label>
-          <input
-            {...register("name", { required: "Name is required" })}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit(submit)} className="space-y-8">
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
+            {/* Category */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Category
+              </label>
+              <select
+                {...register("category", { required: "Category is required" })}
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              >
+                <option value="">Select category</option>
+                <option value="electronics">Electronics</option>
+                <option value="furniture">Furniture</option>
+                <option value="grocery">Grocery</option>
+                <option value="clothing">Clothing</option>
+              </select>
+              {errors.category && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.category.message}
+                </p>
+              )}
+            </div>
 
-        {/* Lastname */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Lastname
-          </label>
-          <input
-            {...register("lastname", { required: "Lastname is required" })}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.lastname && (
-            <p className="text-red-500 text-sm mt-1">{errors.lastname.message}</p>
-          )}
-        </div>
+            {/* Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Name
+              </label>
+              <input
+                {...register("name", { required: "Name is required" })}
+                type="text"
+                placeholder="Enter product name"
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
 
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
-          </label>
-          <input
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Invalid email format",
-              },
-            })}
-            type="email"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
+            {/* Unit */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Unit
+              </label>
+              <input
+                {...register("unit", { required: "Unit is required" })}
+                type="text"
+                placeholder="e.g. kg, pc, box"
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.unit && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.unit.message}
+                </p>
+              )}
+            </div>
 
-        {/* Phone */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone Number
-          </label>
-          <input
-            {...register("phone", { required: "Phone number is required" })}
-            type="tel"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-          )}
-        </div>
+            {/* Image */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Image (optional)
+              </label>
+              <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-8 bg-slate-50 hover:bg-slate-100 transition-colors">
+                <input
+                  {...register("image")}
+                  type="file"
+                  className="w-full cursor-pointer opacity-0 absolute inset-0 z-10"
+                />
+                <div className="text-center">
+                  <p className="text-slate-600 font-medium">
+                    Click to upload product image
+                  </p>
+                  <p className="text-slate-400 text-sm">PNG, JPG or WebP</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        {/* Address */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Address
-          </label>
-          <textarea
-            {...register("address", { required: "Address is required" })}
-            rows="3"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.address && (
-            <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-          )}
-        </div>
-
-        {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="flex-1 bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 transition"
-          >
-            Save Changes
-          </button>
-          <button
-            type="button"
-            onClick={cancel}
-            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+          {/* Buttons */}
+          <div className="flex gap-6">
+            <button
+              type="submit"
+              className="flex-1 bg-slate-900 text-white py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-800 transition-all active:scale-[0.99] shadow-lg shadow-slate-200"
+            >
+              Update Product
+            </button>
+            <button
+              type="button"
+              onClick={cancel}
+              className="flex-1 bg-white border border-slate-200 text-slate-600 py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-50 transition-all active:scale-[0.99]"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

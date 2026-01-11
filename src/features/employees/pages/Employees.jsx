@@ -7,7 +7,7 @@ function Employees() {
   const [activeTab, setActiveTab] = useState("list");
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6">
+    <div className="w-full mx-auto p-6">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b">
         <TabButton

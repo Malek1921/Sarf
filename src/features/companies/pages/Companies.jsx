@@ -1,14 +1,14 @@
 import { useState } from "react";
-import CompaniesList from "../CompaniesList";
-import AddCompany from "../AddCompany";
-import EditCompany from "../../dashboard/EditCompany";
+import CompaniesList from "../components/CompaniesList";
+import AddCompany from "../components/AddCompany";
+import EditCompany from "../components/EditCompany";
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("list");
   const [editCompany, setEditCompany] = useState(null);
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6">
+    <div className="w-full  mx-auto p-6">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b">
         <TabButton
@@ -30,11 +30,16 @@ function Dashboard() {
 
       {/* Content */}
       <div className="bg-white rounded-xl shadow p-6">
-        {activeTab==="list" && (
-          <CompaniesList setActiveTab={setActiveTab} setEditCompany={setEditCompany} />
+        {activeTab === "list" && (
+          <CompaniesList
+            setActiveTab={setActiveTab}
+            setEditCompany={setEditCompany}
+          />
         )}
-        {activeTab==="add" && <AddCompany setActiveTab={setActiveTab} />}
-        {activeTab==="edit" && <EditCompany setActiveTab={setActiveTab} company={editCompany} />}
+        {activeTab === "add" && <AddCompany setActiveTab={setActiveTab} />}
+        {activeTab === "edit" && (
+          <EditCompany setActiveTab={setActiveTab} company={editCompany} />
+        )}
       </div>
     </div>
   );

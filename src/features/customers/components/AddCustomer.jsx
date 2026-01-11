@@ -13,132 +13,163 @@ function AddCustomer({ setActiveTab }) {
 
   const { customers, setCustomers } = useCustomers();
 
-  // const submit = (data) => {
-  //   const newCustomer = {
-  //     ...data,
-  //     id: Math.floor( Math.random() * 9000), 
-  //   };
-
-  //   setCustomers([...customers, newCustomer]);
-  //   toast.success(
-  //     `Customer "${data.name} ${data.lastname}" added successfully!`
-  //   );
-  //   reset();
-  //   setActiveTab("list");
-  // };
-
   const submit = (data) => {
-    console.log(data)
-  }
-
-  const cancel = () => {
+    const newCustomer = {
+      ...data,
+      id: Math.floor(Math.random() * 9000), // simple unique ID for demo
+    };
+    setCustomers([...customers, newCustomer]);
+    toast.success(
+      `Customer "${data.name} ${data.lastname}" added successfully!`
+    );
+    reset();
     setActiveTab("list");
   };
 
+  const cancel = () => setActiveTab("list");
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-        Add Customer
-      </h2>
-
-      <form onSubmit={handleSubmit(submit)} className="space-y-5">
-        {/* Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Name
-          </label>
-          <input
-            {...register("name", { required: "Name is required" })}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
+    <div className="w-full px-6 py-10">
+      <div className="max-w-full mx-auto">
+        <div className="mb-10 border-b border-slate-200 pb-6">
+          <h2 className="text-3xl font-bold text-slate-800">Add Customer</h2>
         </div>
 
-        {/* Lastname */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Lastname
-          </label>
-          <input
-            {...register("lastname", { required: "Lastname is required" })}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.lastname && (
-            <p className="text-red-500 text-sm mt-1">{errors.lastname.message}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit(submit)} className="space-y-8">
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
+            {/* Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Name
+              </label>
+              <input
+                {...register("name", { required: "Name is required" })}
+                type="text"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
 
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
-          </label>
-          <input
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                message: "Invalid email format",
-              },
-            })}
-            type="email"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
+            {/* Lastname */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Lastname
+              </label>
+              <input
+                {...register("lastname", { required: "Lastname is required" })}
+                type="text"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.lastname && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.lastname.message}
+                </p>
+              )}
+            </div>
 
-        {/* Phone */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone Number
-          </label>
-          <input
-            {...register("phone", { required: "Phone number is required" })}
-            type="tel"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-          )}
-        </div>
+            {/* Email */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Email
+              </label>
+              <input
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Invalid email format",
+                  },
+                })}
+                type="email"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-        {/* Address */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Address
-          </label>
-          <textarea
-            {...register("address", { required: "Address is required" })}
-            rows="3"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.address && (
-            <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-          )}
-        </div>
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Phone Number
+              </label>
+              <input
+                {...register("phone", { required: "Phone number is required" })}
+                type="tel"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
 
-        {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="flex-1 bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 transition"
-          >
-            Add Customer
-          </button>
-          <button
-            type="button"
-            onClick={cancel}
-            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+            {/* Address */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Address
+              </label>
+              <textarea
+                {...register("address", { required: "Address is required" })}
+                rows="3"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.address && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.address.message}
+                </p>
+              )}
+            </div>
+
+            {/* Discount */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Discount (%)
+              </label>
+              <input
+                {...register("discount", {
+                  required: "Discount is required",
+                  valueAsNumber: true,
+                  min: { value: 0, message: "Cannot be negative" },
+                  max: { value: 100, message: "Cannot exceed 100" },
+                })}
+                type="number"
+                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                placeholder="Enter discount percentage"
+              />
+              {errors.discount && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.discount.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-6">
+            <button
+              type="submit"
+              className="flex-1 bg-slate-900 text-white py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-800 transition-all active:scale-[0.99] shadow-lg shadow-slate-200"
+            >
+              Add Customer
+            </button>
+            <button
+              type="button"
+              onClick={cancel}
+              className="flex-1 bg-white border border-slate-200 text-slate-600 py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-50 transition-all active:scale-[0.99]"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

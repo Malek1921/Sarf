@@ -3,85 +3,114 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 function EditCompany({ setActiveTab, company }) {
-  const { register, handleSubmit, formState:{ errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: company || {},
   });
 
+  if (!company) return <p className="text-gray-500">No company selected.</p>;
+
   const submit = (data) => {
-    console.log("Updated company:", data);
+    console.log("Updated Company:", data);
     toast.success(`Company "${data.name}" updated`);
     setActiveTab("list");
   };
 
   const cancel = () => setActiveTab("list");
 
-  if(!company) return <p className="text-gray-500">No company selected.</p>;
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">Edit Company</h2>
-
-      <form onSubmit={handleSubmit(submit)} className="space-y-5">
-        {/* ID */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Company ID</label>
-          <input
-            type="text"
-            value={company.id}
-            disabled
-            className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
-          />
+    <div className="w-full px-6 py-10">
+      <div className="max-w-full mx-auto">
+        <div className="mb-10 border-b border-slate-200 pb-6">
+          <h2 className="text-3xl font-bold text-slate-800">Edit Company</h2>
         </div>
 
-        {/* Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input
-            {...register("name",{required:"Name is required"})}
-            type="text"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-        </div>
+        <form onSubmit={handleSubmit(submit)} className="space-y-8">
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
+            {/* Company ID */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Company ID
+              </label>
+              <input
+                type="text"
+                value={company.id}
+                disabled
+                className="w-full px-6 py-4 border rounded-xl bg-gray-100 text-gray-600 cursor-not-allowed"
+              />
+            </div>
 
-        {/* Phone */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-          <input
-            {...register("phone",{required:"Phone is required"})}
-            type="tel"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
-        </div>
+            {/* Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Name
+              </label>
+              <input
+                {...register("name", { required: "Name is required" })}
+                type="text"
+                placeholder="Enter company name"
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
 
-        {/* Address */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-          <textarea
-            {...register("address")}
-            rows="3"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-        </div>
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Phone
+              </label>
+              <input
+                {...register("phone", { required: "Phone is required" })}
+                type="tel"
+                placeholder="Enter phone number"
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm font-medium">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
 
-        {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="flex-1 bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 transition"
-          >
-            Save Changes
-          </button>
-          <button
-            type="button"
-            onClick={cancel}
-            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+            {/* Address */}
+            <div className="space-y-2">
+              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Address
+              </label>
+              <textarea
+                {...register("address")}
+                rows="3"
+                placeholder="Enter company address"
+                className="w-full px-6 py-4 border border-slate-300 rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-6">
+            <button
+              type="submit"
+              className="flex-1 bg-slate-900 text-white py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-800 transition-all active:scale-[0.99] shadow-lg shadow-slate-200"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={cancel}
+              className="flex-1 bg-white border border-slate-200 text-slate-600 py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-50 transition-all active:scale-[0.99]"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
