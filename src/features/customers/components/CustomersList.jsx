@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import customerList from "../../store/customers/customerslist";
+import customerList from "../../store/customers/customersList";
 
 function CustomersList({ setActiveTab, setEditCustomer }) {
   const [filters, setFilters] = useState({
