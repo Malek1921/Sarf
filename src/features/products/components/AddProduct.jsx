@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import useProducts from "../../store/products/useProducts";
 
 function AddProduct({ setActiveTab }) {
   const {
@@ -9,11 +10,13 @@ function AddProduct({ setActiveTab }) {
     reset,
     formState: { errors },
   } = useForm();
+  const { AddProduct } = useProducts();
 
   const submit = (data) => {
     console.log("Submitted product:", data);
     toast.success(`Product "${data.name}" added successfully!`);
     reset();
+    AddProduct(data);
     setActiveTab("list");
   };
 
@@ -33,14 +36,15 @@ function AddProduct({ setActiveTab }) {
           {/* FORM GRID */}
           <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
               {/* Category */}
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
                   Category
                 </label>
                 <select
-                  {...register("category", { required: "Category is required" })}
+                  {...register("category", {
+                    required: "Category is required",
+                  })}
                   className="w-full px-5 py-4 border border-slate-300 rounded-xl bg-slate-50 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none"
                 >
                   <option value="">Select category</option>
@@ -50,7 +54,9 @@ function AddProduct({ setActiveTab }) {
                   <option value="clothing">Clothing</option>
                 </select>
                 {errors.category && (
-                  <p className="text-red-500 text-sm">{errors.category.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.category.message}
+                  </p>
                 )}
               </div>
 
@@ -101,13 +107,10 @@ function AddProduct({ setActiveTab }) {
                     <p className="text-slate-600 font-medium">
                       Click to upload product image
                     </p>
-                    <p className="text-slate-400 text-sm">
-                      PNG, JPG, WebP
-                    </p>
+                    <p className="text-slate-400 text-sm">PNG, JPG, WebP</p>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
