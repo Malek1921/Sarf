@@ -26,6 +26,15 @@ const employees = [
     password: "123456",
     position: "Sales",
   },
+  {
+    id: 4,
+    name: "Sayed Mojib",
+    lastname: "Sadat",
+    phone: "0799117595",
+    email: "sayedmojibsadat06@gmail.com",
+    password: "123",
+    position: "Manager",
+  },
 ];
 
 export default employees;

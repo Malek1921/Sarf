@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useCustomers from "../../store/useCustomers";
+import useCustomers from "../../store/customers/useCustomers";
 import { toast } from "react-toastify";
 
 function EditCustomer({ setActiveTab, customer }) {
@@ -9,25 +9,18 @@ function EditCustomer({ setActiveTab, customer }) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: customer || {},
+    defaultValues: customer,
   });
 
-  const { customers, setCustomers } = useCustomers();
+  const { updateCustomer } = useCustomers();
 
   const submit = (data) => {
-    const updated = customers.map((c) =>
-      c.id === customer.id ? { ...c, ...data } : c
-    );
-    setCustomers(updated);
-    toast.success(
-      `Customer "${data.name} ${data.lastname}" updated successfully!`
-    );
+    updateCustomer({ ...customer, ...data });
+    toast.success(`${data.name} ${data.lastname} updated`);
     setActiveTab("list");
   };
 
-  const cancel = () => setActiveTab("list");
-
-  if (!customer) return <p className="text-gray-500">No customer selected.</p>;
+  if (!customer) return null;
 
   return (
     <div className="w-full px-6 py-10">
@@ -37,147 +30,77 @@ function EditCustomer({ setActiveTab, customer }) {
         </div>
 
         <form onSubmit={handleSubmit(submit)} className="space-y-8">
-          <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
-            {/* ID */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Customer ID
-              </label>
-              <input
-                type="text"
-                value={customer.id}
-                disabled
-                className="w-full px-6 py-4 border rounded-xl bg-gray-100 text-gray-600 cursor-not-allowed"
-              />
-            </div>
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-6">
+            <input
+              type="text"
+              value={customer.id}
+              disabled
+              className="w-full px-6 py-4 border rounded-xl bg-gray-100"
+            />
 
-            {/* Name */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Name
-              </label>
+            <div>
               <input
-                {...register("name", { required: "Name is required" })}
-                type="text"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                {...register("name", { required: true })}
+                className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.name && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.name.message}
-                </p>
+                <p className="text-red-500 text-sm mt-2">Name is required</p>
               )}
             </div>
 
-            {/* Lastname */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Lastname
-              </label>
+            <div>
               <input
-                {...register("lastname", { required: "Lastname is required" })}
-                type="text"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                {...register("lastname", { required: true })}
+                className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.lastname && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.lastname.message}
+                <p className="text-red-500 text-sm mt-2">
+                  Last name is required
                 </p>
               )}
             </div>
 
-            {/* Email */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Email
-              </label>
+            <div>
               <input
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format",
-                  },
-                })}
-                type="email"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                {...register("email", { required: true })}
+                className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.email.message}
-                </p>
+                <p className="text-red-500 text-sm mt-2">Email is required</p>
               )}
             </div>
 
-            {/* Phone */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Phone Number
-              </label>
+            <div>
               <input
-                {...register("phone", { required: "Phone number is required" })}
-                type="tel"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                {...register("phone", { required: true })}
+                className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.phone && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.phone.message}
-                </p>
+                <p className="text-red-500 text-sm mt-2">Phone is required</p>
               )}
             </div>
 
-            {/* Address */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Address
-              </label>
+            <div>
               <textarea
-                {...register("address", { required: "Address is required" })}
-                rows="3"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
+                {...register("address", { required: true })}
+                className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.address && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.address.message}
-                </p>
-              )}
-            </div>
-
-            {/* Discount */}
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Discount (%)
-              </label>
-              <input
-                {...register("discount", {
-                  required: "Discount is required",
-                  valueAsNumber: true,
-                  min: { value: 0, message: "Cannot be negative" },
-                  max: { value: 100, message: "Cannot exceed 100" },
-                })}
-                type="number"
-                className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all"
-                placeholder="Enter discount percentage"
-              />
-              {errors.discount && (
-                <p className="text-red-500 text-sm font-medium">
-                  {errors.discount.message}
+                <p className="text-red-500 text-sm mt-2">
+                  Address is required
                 </p>
               )}
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-6">
-            <button
-              type="submit"
-              className="flex-1 bg-slate-900 text-white py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-800 transition-all active:scale-[0.99] shadow-lg shadow-slate-200"
-            >
+            <button type="submit" className="flex-1 bg-slate-900 text-white py-5">
               Save Changes
             </button>
             <button
               type="button"
-              onClick={cancel}
-              className="flex-1 bg-white border border-slate-200 text-slate-600 py-5 px-8 rounded-xl font-bold text-xl hover:bg-slate-50 transition-all active:scale-[0.99]"
+              onClick={() => setActiveTab("list")}
+              className="flex-1 bg-white border py-5"
             >
               Cancel
             </button>

@@ -1,84 +1,166 @@
-const customerList = [
-  {
-    id: 1001,
-    name: "John",
-    lastname: "Smith",
-    email: "john.smith@example.com",
-    phone: "+1 202 555 0111",
-    address: "New York, USA",
-  },
-  {
-    id: 5012,
-    name: "Emily",
-    lastname: "Johnson",
-    email: "emily.johnson@example.com",
-    phone: "+44 20 7946 0012",
-    address: "London, UK",
-  },
-  {
-    id: 2303,
-    name: "Michael",
-    lastname: "Brown",
-    email: "michael.brown@example.com",
-    phone: "+61 2 9374 1234",
-    address: "Sydney, Australia",
-  },
-  {
-    id: 1304,
-    name: "Sophia",
-    lastname: "Martinez",
-    email: "sophia.martinez@example.com",
-    phone: "+34 91 123 4567",
-    address: "Madrid, Spain",
-  },
-  {
-    id: 9505,
-    name: "David",
-    lastname: "Wilson",
-    email: "david.wilson@example.com",
-    phone: "+49 30 1234 5678",
-    address: "Berlin, Germany",
-  },
-  {
-    id: 4376,
-    name: "Olivia",
-    lastname: "Taylor",
-    email: "olivia.taylor@example.com",
-    phone: "+33 1 44 55 66 77",
-    address: "Paris, France",
-  },
-  {
-    id: 3907,
-    name: "James",
-    lastname: "Anderson",
-    email: "james.anderson@example.com",
-    phone: "+1 310 555 0199",
-    address: "Los Angeles, USA",
-  },
-  {
-    id: 2488,
-    name: "Isabella",
-    lastname: "Harris",
-    email: "isabella.harris@example.com",
-    phone: "+39 06 1234 5678",
-    address: "Rome, Italy",
-  },
-  {
-    id: 5609,
-    name: "William",
-    lastname: "Clark",
-    email: "william.clark@example.com",
-    phone: "+81 3 1234 5678",
-    address: "Tokyo, Japan",
-  },
-  {
-    id: 7810,
-    name: "Mia",
-    lastname: "Lewis",
-    email: "mia.lewis@example.com",
-    phone: "+55 11 98765 4321",
-    address: "São Paulo, Brazil",
-  },
-];
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import useCustomers from "YOUR_PATH_HERE";
 
-export default customerList;
+function CustomersList({ setActiveTab, setEditCustomer }) {
+  const { customers, setCustomers } = useCustomers();
+  const [filters, setFilters] = useState({
+    id: "",
+    name: "",
+    lastname: "",
+  });
+
+  const handleDelete = (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this customer?");
+    if (!confirmed) return;
+    const updatedCustomers = customers.filter(c => c.id !== id);
+    setCustomers(updatedCustomers);
+    toast.error(`Customer with ID ${id} deleted successfully!`);
+  };
+
+  const handleEdit = (customer) => {
+    setEditCustomer(customer);
+    setActiveTab("edit");
+    toast.info(`Editing customer "${customer.name} ${customer.lastname}"`);
+  };
+
+  const filteredCustomers = customers.filter((c) => {
+    return (
+      (filters.id === "" || c.id.toString().includes(filters.id)) &&
+      (filters.name === "" ||
+        c.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+      (filters.lastname === "" ||
+        c.lastname.toLowerCase().includes(filters.lastname.toLowerCase()))
+    );
+  });
+
+  return (
+    <div className="w-full px-6 py-10">
+      <div className="max-w-full mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 border-b border-slate-200 pb-8">
+          <div>
+            <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+              Customer Directory
+            </h2>
+            <p className="text-slate-500 mt-2 text-lg">
+              Manage your client relationships and contact data.
+            </p>
+          </div>
+          <button
+            onClick={() => setActiveTab("add")}
+            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+          >
+            + Add New Customer
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+              Search ID
+            </label>
+            <input
+              type="number"
+              placeholder="e.g. 1042"
+              value={filters.id}
+              onChange={(e) => setFilters({ ...filters, id: e.target.value })}
+              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all shadow-sm"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+              First Name
+            </label>
+            <input
+              type="text"
+              placeholder="Filter by name..."
+              value={filters.name}
+              onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all shadow-sm"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+              Last Name
+            </label>
+            <input
+              type="text"
+              placeholder="Filter by lastname..."
+              value={filters.lastname}
+              onChange={(e) =>
+                setFilters({ ...filters, lastname: e.target.value })
+              }
+              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all shadow-sm"
+            />
+          </div>
+        </div>
+
+        {filteredCustomers.length === 0 ? (
+          <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+            <p className="text-slate-400 text-xl font-medium">
+              No customers found matching these filters.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 text-slate-500 uppercase text-xs font-black tracking-widest">
+                    <th className="px-6 py-5 border-b border-slate-100">ID</th>
+                    <th className="px-6 py-5 border-b border-slate-100">Full Name</th>
+                    <th className="px-6 py-5 border-b border-slate-100">Contact Info</th>
+                    <th className="px-6 py-5 border-b border-slate-100">Location</th>
+                    <th className="px-6 py-5 border-b border-slate-100 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredCustomers.map((c) => (
+                    <tr key={c.id} className="hover:bg-slate-50/50 transition-colors group">
+                      <td className="px-6 py-5 text-slate-400 font-mono text-sm">#{c.id}</td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-sm">
+                            {c.name[0]}
+                            {c.lastname[0]}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-800">{c.name} {c.lastname}</p>
+                            <p className="text-xs text-slate-400">Customer</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <p className="text-sm font-medium text-slate-700">{c.email}</p>
+                        <p className="text-xs text-slate-400">{c.phone}</p>
+                      </td>
+                      <td className="px-6 py-5 text-sm text-slate-600">{c.address}</td>
+                      <td className="px-6 py-5">
+                        <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleEdit(c)}
+                            className="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-900 hover:text-white transition-all"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(c.id)}
+                            className="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-bold hover:bg-red-600 hover:text-white transition-all"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default CustomersList;
