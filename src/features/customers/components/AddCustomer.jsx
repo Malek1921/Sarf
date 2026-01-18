@@ -16,7 +16,7 @@ function AddCustomer({ setActiveTab }) {
   const submit = (data) => {
     const newCustomer = {
       ...data,
-      id: Math.floor(Math.random() * 9000),
+      id: Math.floor(Math.random()*9000),
     };
 
     addCustomer(newCustomer);

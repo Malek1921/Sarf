@@ -6,6 +6,7 @@ import useEditIndex from "../../store/shared/useEditIndex";
 function CustomersList({ setActiveTab }) {
   const { customers } = useCustomers();
   const { editIndex, setEditIndex } = useEditIndex();
+  const { deleteCustomer } = useCustomers();
 
   const [filters, setFilters] = useState({
     id: "",
@@ -14,6 +15,7 @@ function CustomersList({ setActiveTab }) {
   });
 
   const handleDelete = (id) => {
+    deleteCustomer(id)
     toast.error(`Customer with ID ${id} deleted (demo only)!`);
   };
 
