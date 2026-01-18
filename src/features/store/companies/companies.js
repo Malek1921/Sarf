@@ -31,7 +31,8 @@ const companies = [
   },
   {
     id: 11,
-    name: "SkyHigh", phone: "0700000011",
+    name: "SkyHigh",
+    phone: "0700000011",
     address: "Herat",
   },
   { id: 12, name: "Omega Corp", phone: "0700000012", address: "Kabul" },

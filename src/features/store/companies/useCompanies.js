@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import companies from "./companiesList";
+import companies from "./companies";
 
 const useCompanies = create((set) => ({
   companies: companies,
