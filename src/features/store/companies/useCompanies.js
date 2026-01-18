@@ -1,24 +1,24 @@
 import { create } from "zustand";
-import products from "./product";
+import companies from "./companiesList";
 
-const useProducts = create((set) => ({
-  products: products,
-  addProducts: (product) =>
+const useCompanies = create((set) => ({
+  companies: companies,
+  addCompany: (company) =>
     set((state) => ({
-      products: [...state.products, product],
+      companies: [...state.companies, company],
     })),
 
-  EditProducts: (updatedProduct) =>
+  editCompany: (updatedcompany) =>
     set((state) => ({
-      products: state.products.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product
+      companies: state.companies.map((company) =>
+        company.id === updatedcompany.id ? updatedcompany : company,
       ),
     })),
 
-  DeleteProducts: (id) =>
+  deleteCompany: (id) =>
     set((state) => ({
-      products: state.products.filter((product) => product.id !== id),
+      companies: state.companies.filter((company) => company.id !== id),
     })),
 }));
 
-export default useProducts;
+export default useCompanies;

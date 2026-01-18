@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useCustomers from "../../store/customers/useCustomers";
+import useEditIndex from "../../store/shared/useEditIndex";
 
-function CustomersList({ setActiveTab, setEditCustomer }) {
+function CustomersList({ setActiveTab }) {
   const { customers } = useCustomers();
+  const { editIndex, setEditIndex } = useEditIndex();
 
   const [filters, setFilters] = useState({
     id: "",
@@ -15,11 +17,9 @@ function CustomersList({ setActiveTab, setEditCustomer }) {
     toast.error(`Customer with ID ${id} deleted (demo only)!`);
   };
 
-  const handleEdit = (customer) => {
-    setEditCustomer(customer);
-    setActiveTab("edit");
-    toast.info(`Editing customer "${customer.name} ${customer.lastname}"`);
-  };
+  useEffect(() => {
+    console.log(editIndex);
+  }, [editIndex]);
 
   const filteredCustomers = customers.filter((c) => {
     return (
@@ -70,9 +70,7 @@ function CustomersList({ setActiveTab, setEditCustomer }) {
             <input
               type="text"
               value={filters.name}
-              onChange={(e) =>
-                setFilters({ ...filters, name: e.target.value })
-              }
+              onChange={(e) => setFilters({ ...filters, name: e.target.value })}
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl"
             />
           </div>
@@ -118,7 +116,10 @@ function CustomersList({ setActiveTab, setEditCustomer }) {
                     <td className="px-6 py-5">{c.address}</td>
                     <td className="px-6 py-5 text-right">
                       <button
-                        onClick={() => handleEdit(c)}
+                        onClick={() => {
+                          setEditIndex(c.id);
+                          setActiveTab("edit");
+                        }}
                         className="px-4 py-2 bg-slate-100 rounded-lg mr-2"
                       >
                         Edit

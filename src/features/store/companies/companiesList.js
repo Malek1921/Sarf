@@ -1,4 +1,4 @@
-const companiesList = [
+const companies = [
   { id: 1, name: "Apple", phone: "0700000001", address: "Kabul" },
   { id: 2, name: "Hilon Pharama", phone: "0700000002", address: "Herat" },
   { id: 3, name: "Warner bros", phone: "0700000003", address: "Mazar" },
@@ -31,8 +31,7 @@ const companiesList = [
   },
   {
     id: 11,
-    name: "SkyHigh Enterprises",
-    phone: "0700000011",
+    name: "SkyHigh", phone: "0700000011",
     address: "Herat",
   },
   { id: 12, name: "Omega Corp", phone: "0700000012", address: "Kabul" },
@@ -51,4 +50,4 @@ const companiesList = [
   },
 ];
 
-export default companiesList;
+export default companies;

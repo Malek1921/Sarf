@@ -3,19 +3,19 @@ import products from "./product";
 
 const useProducts = create((set) => ({
   products: products,
-  addProducts: (product) =>
+  addProduct: (product) =>
     set((state) => ({
       products: [...state.products, product],
     })),
 
-  EditProducts: (updatedProduct) =>
+  editProduct: (updatedProduct) =>
     set((state) => ({
       products: state.products.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product
+        product.id === updatedProduct.id ? updatedProduct : product,
       ),
     })),
 
-  DeleteProducts: (id) =>
+  deleteProduct: (id) =>
     set((state) => ({
       products: state.products.filter((product) => product.id !== id),
     })),

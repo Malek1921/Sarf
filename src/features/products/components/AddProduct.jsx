@@ -10,13 +10,13 @@ function AddProduct({ setActiveTab }) {
     reset,
     formState: { errors },
   } = useForm();
-  const { AddProduct } = useProducts();
+  const { addProduct } = useProducts();
 
   const submit = (data) => {
     console.log("Submitted product:", data);
     toast.success(`Product "${data.name}" added successfully!`);
     reset();
-    AddProduct(data);
+    addProduct(data);
     setActiveTab("list");
   };
 

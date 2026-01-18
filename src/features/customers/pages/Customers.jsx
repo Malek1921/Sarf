@@ -5,7 +5,6 @@ import EditCustomer from "../components/EditCustomer";
 
 function Customers() {
   const [activeTab, setActiveTab] = useState("list");
-  const [editCustomer, setEditCustomer] = useState(null);
 
   return (
     <div className="w-full mx-auto p-6">
@@ -28,16 +27,9 @@ function Customers() {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6">
-        {activeTab === "list" && (
-          <CustomersList
-            setActiveTab={setActiveTab}
-            setEditCustomer={setEditCustomer}
-          />
-        )}
+        {activeTab === "list" && <CustomersList setActiveTab={setActiveTab} />}
         {activeTab === "add" && <AddCustomer setActiveTab={setActiveTab} />}
-        {activeTab === "edit" && (
-          <EditCustomer setActiveTab={setActiveTab} customer={editCustomer} />
-        )}
+        {activeTab === "edit" && <EditCustomer setActiveTab={setActiveTab} />}
       </div>
     </div>
   );
@@ -47,10 +39,11 @@ function TabButton({ label, active, onClick }) {
   return (
     <button
       onClick={onClick && onClick}
-      className={`px-4 py-2 text-sm font-semibold border-b-2 transition ${active
+      className={`px-4 py-2 text-sm font-semibold border-b-2 transition ${
+        active
           ? "border-black text-black"
           : "border-transparent text-gray-500 hover:text-black"
-        }`}
+      }`}
     >
       {label && label}
     </button>

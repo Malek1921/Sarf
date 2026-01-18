@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import companiesList from "../../store/companies/companiesList";
-
+import useCompanies from "../../store/companies/useCompanies";
 function CompaniesList({ setActiveTab, setEditCompany }) {
   const [filters, setFilters] = useState({ name: "" });
 
@@ -10,6 +9,7 @@ function CompaniesList({ setActiveTab, setEditCompany }) {
     // to the parent or use a local state initialized with companiesList
     toast.error(`Company with ID ${id} deleted (demo only)`);
   };
+  const { companies } = useCompanies();
 
   const handleEdit = (company) => {
     setEditCompany(company);
@@ -17,8 +17,8 @@ function CompaniesList({ setActiveTab, setEditCompany }) {
     toast.info(`Editing company "${company.name}"`);
   };
 
-  const filteredCompanies = companiesList.filter((c) =>
-    c.name.toLowerCase().includes(filters.name.toLowerCase())
+  const filteredCompanies = companies.filter((c) =>
+    c.name.toLowerCase().includes(filters.name.toLowerCase()),
   );
 
   return (

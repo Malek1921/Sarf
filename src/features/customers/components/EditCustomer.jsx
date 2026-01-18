@@ -1,26 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useCustomers from "../../store/customers/useCustomers";
 import { toast } from "react-toastify";
+import useEditIndex from "../../store/shared/useEditIndex";
+import customers from "../../store/customers/customers";
 
-function EditCustomer({ setActiveTab, customer }) {
+function EditCustomer({ setActiveTab }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: customer,
-  });
+  } = useForm();
+  const { editIndex } = useEditIndex();
+  const { editCustomer } = useCustomers();
+  useEffect(() => {
+    if (editIndex === null || editIndex === undefined) return;
 
-  const { updateCustomer } = useCustomers();
+    const customer = customers.find((c) => c.id === editIndex);
+    if (!customer) return;
+
+    reset(customer);
+  }, [editIndex, reset]);
 
   const submit = (data) => {
-    updateCustomer({ ...customer, ...data });
+    editCustomer(data);
     toast.success(`${data.name} ${data.lastname} updated`);
     setActiveTab("list");
   };
 
-  if (!customer) return null;
+  if (!editIndex) return null;
 
   return (
     <div className="w-full px-6 py-10">
@@ -33,7 +42,7 @@ function EditCustomer({ setActiveTab, customer }) {
           <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-6">
             <input
               type="text"
-              value={customer.id}
+              {...register("id")}
               disabled
               className="w-full px-6 py-4 border rounded-xl bg-gray-100"
             />
@@ -86,15 +95,16 @@ function EditCustomer({ setActiveTab, customer }) {
                 className="w-full px-6 py-4 border rounded-xl"
               />
               {errors.address && (
-                <p className="text-red-500 text-sm mt-2">
-                  Address is required
-                </p>
+                <p className="text-red-500 text-sm mt-2">Address is required</p>
               )}
             </div>
           </div>
 
           <div className="flex gap-6">
-            <button type="submit" className="flex-1 bg-slate-900 text-white py-5">
+            <button
+              type="submit"
+              className="flex-1 bg-slate-900 text-white py-5"
+            >
               Save Changes
             </button>
             <button

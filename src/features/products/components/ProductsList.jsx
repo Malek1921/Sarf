@@ -15,7 +15,7 @@ function ProductsList() {
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (company === "" || product.company === company)
+      (company === "" || product.company === company),
   );
 
   return (
