@@ -10,19 +10,24 @@ function AddProduct({ setActiveTab }) {
     reset,
     formState: { errors },
   } = useForm();
+
   const { addProduct } = useProducts();
 
   const submit = (data) => {
-    console.log("Submitted product:", data);
+    const newProduct = {
+      ...data,
+      id: Math.floor(Math.random() * 9000), // same ID logic as AddCustomer
+    };
+
+    addProduct(newProduct);
+
     toast.success(`Product "${data.name}" added successfully!`);
+
     reset();
-    addProduct(data);
     setActiveTab("list");
   };
 
-  const cancel = () => {
-    setActiveTab("list");
-  };
+  const cancel = () => setActiveTab("list");
 
   return (
     <div className="w-full px-6 py-10">
@@ -100,15 +105,11 @@ function AddProduct({ setActiveTab }) {
                 <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-10 bg-slate-50 hover:bg-slate-100 transition">
                   <input
                     {...register("image")}
-                    type="file"
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    type="text"
+                    placeholder="Image URL"
+                    className="w-full px-5 py-4 border rounded-xl bg-slate-50"
                   />
-                  <div className="text-center">
-                    <p className="text-slate-600 font-medium">
-                      Click to upload product image
-                    </p>
-                    <p className="text-slate-400 text-sm">PNG, JPG, WebP</p>
-                  </div>
+                
                 </div>
               </div>
             </div>

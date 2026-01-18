@@ -1,7 +1,11 @@
-import { useState } from "react";
-import products from "../../store/products/product";
+import React, { useState } from "react";
+import useProducts from "../../store/products/useProducts";
+import useEditIndex from "../../store/shared/useEditIndex";
 
-function ProductsList() {
+function ProductsList({ setActiveTab }) {
+  const { products, deleteProduct } = useProducts();   // ✅ get products from store
+  const { setEditIndex } = useEditIndex();
+
   const [search, setSearch] = useState("");
   const [company, setCompany] = useState("");
 
@@ -15,13 +19,13 @@ function ProductsList() {
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (company === "" || product.company === company),
+      (company === "" || product.company === company)
   );
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 lg:p-10 text-slate-900">
-      {/* Container set to full width */}
       <div className="max-w-full mx-auto">
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 border-b border-slate-200 pb-8">
           <div>
             <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -31,9 +35,15 @@ function ProductsList() {
               Manage and monitor your full catalog across all brands.
             </p>
           </div>
+          <button
+            onClick={() => setActiveTab("add")}
+            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+          >
+            + Add New Product
+          </button>
         </div>
 
-        {/* Full-Length Filter Bar */}
+        {/* Filter Bar */}
         <div className="flex flex-col md:flex-row gap-6 mb-12">
           <div className="flex-1 relative">
             <input
@@ -41,8 +51,7 @@ function ProductsList() {
               placeholder="Search by product name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl bg-white border border-slate-200 px-6 py-4 text-lg
-                       shadow-sm focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all"
+              className="w-full rounded-2xl bg-white border border-slate-200 px-6 py-4 text-lg shadow-sm focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all"
             />
           </div>
 
@@ -50,8 +59,7 @@ function ProductsList() {
             <select
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="w-full rounded-2xl bg-white border border-slate-200 px-6 py-4 text-lg
-                       shadow-sm focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all appearance-none"
+              className="w-full rounded-2xl bg-white border border-slate-200 px-6 py-4 text-lg shadow-sm focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all appearance-none"
             >
               <option value="">All Companies</option>
               {companies.map((c) => (
@@ -63,15 +71,14 @@ function ProductsList() {
           </div>
         </div>
 
-        {/* Strictly 2-Column Grid Layout */}
+        {/* Product Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
           {filteredProducts.map((p) => (
             <div
               key={p.id}
-              className="group flex flex-col lg:flex-row rounded-3xl border border-slate-200 bg-white 
-                         overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-sky-200"
+              className="group flex flex-col lg:flex-row rounded-3xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-sky-200"
             >
-              {/* Large Image Area */}
+              {/* Image */}
               <div className="w-full lg:w-72 h-64 lg:h-auto overflow-hidden bg-slate-100 border-r border-slate-50">
                 <img
                   src={p.image}
@@ -80,7 +87,7 @@ function ProductsList() {
                 />
               </div>
 
-              {/* Content Area */}
+              {/* Content */}
               <div className="flex-1 p-8 flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-start mb-4">
@@ -98,14 +105,17 @@ function ProductsList() {
 
                 <div className="flex gap-4 pt-6 border-t border-slate-100">
                   <button
-                    className="flex-1 py-4 px-6 bg-slate-900 text-white rounded-xl font-bold 
-                                     hover:bg-slate-800 transition-all active:scale-[0.98]"
+                    onClick={() => {
+                      setEditIndex(p.id);
+                      setActiveTab("edit");
+                    }}
+                    className="flex-1 py-4 px-6 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98]"
                   >
                     Edit Details
                   </button>
                   <button
-                    className="flex-1 py-4 px-6 border border-red-100 text-red-500 rounded-xl font-bold 
-                                     hover:bg-red-50 transition-all active:scale-[0.98]"
+                    onClick={() => deleteProduct(p.id)}
+                    className="flex-1 py-4 px-6 border border-red-100 text-red-500 rounded-xl font-bold hover:bg-red-50 transition-all active:scale-[0.98]"
                   >
                     Remove
                   </button>

@@ -7,7 +7,7 @@ function Products() {
   const [activeTab, setActiveTab] = useState("list");
 
   return (
-    <div className="w-full  mx-auto p-6">
+    <div className="w-full mx-auto p-6">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b">
         <TabButton
@@ -28,17 +28,17 @@ function Products() {
       </div>
 
       {/* Content */}
-      {activeTab === "list" && <ProductsList />}
+      {activeTab === "list" && <ProductsList setActiveTab={setActiveTab} />}
 
       {activeTab === "add" && (
         <div className="bg-white rounded-xl shadow p-6">
-          <AddProduct />
+          <AddProduct setActiveTab={setActiveTab} />
         </div>
       )}
 
       {activeTab === "edit" && (
         <div className="bg-white rounded-xl shadow p-6">
-          <EditProduct />
+          <EditProduct setActiveTab={setActiveTab} />
         </div>
       )}
     </div>
