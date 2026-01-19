@@ -1,10 +1,55 @@
 import React, { useState } from "react";
 import useProducts from "../../store/products/useProducts";
 import useEditIndex from "../../store/shared/useEditIndex";
+import Modal from "react-modal";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { IoIosWarning } from "react-icons/io";
+import { toast } from "react-toastify";
 
 function ProductsList({ setActiveTab }) {
-  const { products, deleteProduct } = useProducts();   // ✅ get products from store
+  const { products, deleteProduct } = useProducts();
   const { setEditIndex } = useEditIndex();
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const openModal = (id) => {
+    setSelectedId(id);
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedId(null);
+  };
+
+  const customStyles = {
+    overlay: {
+      backgroundColor: "#ffffff00",
+      backdropFilter: "blur(5px)",
+      zIndex: 1000,
+    },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "35rem",
+      height: "18rem",
+      borderRadius: "10px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "space-around",
+    },
+  };
+
+  const handleDelete = (id) => {
+    deleteProduct(id);
+    toast.error(`Product with ID ${id} deleted (demo only)!`);
+  };
 
   const [search, setSearch] = useState("");
   const [company, setCompany] = useState("");
@@ -19,7 +64,7 @@ function ProductsList({ setActiveTab }) {
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (company === "" || product.company === company)
+      (company == "" || product.company == company),
   );
 
   return (
@@ -114,7 +159,7 @@ function ProductsList({ setActiveTab }) {
                     Edit Details
                   </button>
                   <button
-                    onClick={() => deleteProduct(p.id)}
+                    onClick={() => openModal(p.id)}
                     className="flex-1 py-4 px-6 border border-red-100 text-red-500 rounded-xl font-bold hover:bg-red-50 transition-all active:scale-[0.98]"
                   >
                     Remove
@@ -125,8 +170,38 @@ function ProductsList({ setActiveTab }) {
           ))}
         </div>
 
-        {/* Empty State */}
-        {filteredProducts.length === 0 && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          shouldCloseOnOverlayClick={false}
+          shouldCloseOnEsc={true}
+        >
+          <IoIosWarning className="text-yellow-400" size={50} />
+          <h2 className="text-center text-xl">
+            Are you sure? <br />
+            You want to delete it?
+          </h2>
+          <div className="w-full h-15 flex flex-row items-center justify-around">
+            <button
+              onClick={closeModal}
+              className="border border-gray-300 font-bold hover:bg-gray-100 transition-all duration-100 w-60 h-10 rounded-md"
+            >
+              No, Cancel
+            </button>
+            <button
+              onClick={() => {
+                handleDelete(selectedId);
+                closeModal();
+              }}
+              className="bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all duration-100 border-0 w-60 h-10 rounded-md"
+            >
+              Yes, Delete it
+            </button>
+          </div>
+        </Modal>
+
+        {filteredProducts.length == 0 && (
           <div className="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200">
             <p className="text-2xl font-medium text-slate-400">
               No products found matching your criteria.
