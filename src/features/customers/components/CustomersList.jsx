@@ -2,11 +2,24 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useCustomers from "../../store/customers/useCustomers";
 import useEditIndex from "../../store/shared/useEditIndex";
+import Modal from 'react-modal';
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { IoIosWarning } from "react-icons/io";
 
 function CustomersList({ setActiveTab }) {
   const { customers } = useCustomers();
   const { editIndex, setEditIndex } = useEditIndex();
   const { deleteCustomer } = useCustomers();
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [deCustomerId, setDeCustomerId] = useState('')
+
+  const openModal = () => {
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
 
   const [filters, setFilters] = useState({
     id: "",
@@ -14,10 +27,35 @@ function CustomersList({ setActiveTab }) {
     lastname: "",
   });
 
+  const customStyles = {
+    overlay: {
+      backgroundColor: '#ffffff00',
+      backdropFilter: 'blur(5px)',
+      zIndex: 1000,
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '35rem',
+      height: '18rem',
+      borderRadius: '10px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-around'
+    }, 
+  };
+
   const handleDelete = (id) => {
     deleteCustomer(id)
     toast.error(`Customer with ID ${id} deleted (demo only)!`);
   };
+
+
 
   useEffect(() => {
     console.log(editIndex);
@@ -127,11 +165,34 @@ function CustomersList({ setActiveTab }) {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(c.id)}
+                        onClick={() => {
+                          openModal()
+                          setDeCustomerId(c.id)
+                        }}
                         className="px-4 py-2 bg-red-50 rounded-lg"
                       >
                         Delete
                       </button>
+                      
+                      <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customStyles}
+                        shouldCloseOnOverlayClick={false}
+                        shouldCloseOnEsc={true}
+                      >
+                        <IoIosWarning className="text-yellow-400" size={50} />
+                        <h2 className="text-center text-xl">Are you shure? <br />You want to delete it?</h2>
+                        <div className="w-full h-15 flex flex-row items-center justify-around">
+                          <button onClick={() => {
+                            closeModal()
+                          }} className="border border-gray-300 font-bold hover:bg-gray-100 transition-all duration-100 w-60 h-10 rounded-md">No, Cancle</button>
+                          <button onClick={() => {
+                            handleDelete(deCustomerId)
+                            closeModal()
+                          }} className="bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all duration-100 border-0 w-60 h-10 rounded-md">Yes, Delete it</button>
+                        </div>
+                      </Modal>
                     </td>
                   </tr>
                 ))}
