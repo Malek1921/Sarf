@@ -29,9 +29,9 @@ function Employees() {
 
       {/* Content */}
       <div className="bg-white rounded-xl shadow p-6">
-        {activeTab === "list" && <EmployeesList />}
-        {activeTab === "add" && <AddEmployee />}
-        {activeTab === "edit" && <EditEmployee />}
+        {activeTab === "list" && <EmployeesList setActiveTab={setActiveTab} />}
+        {activeTab === "add" && <AddEmployee setActiveTab={setActiveTab} />}
+        {activeTab === "edit" && <EditEmployee setActiveTab={setActiveTab} />}
       </div>
     </div>
   );
