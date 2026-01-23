@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useProducts from "../../store/products/useProducts";
 import useEditIndex from "../../store/shared/useEditIndex";
 import Modal from "react-modal";
-import { IoMdCloseCircleOutline } from "react-icons/io";
 import { IoIosWarning } from "react-icons/io";
 import { toast } from "react-toastify";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function ProductsList({ setActiveTab }) {
   const { products, deleteProduct } = useProducts();
@@ -17,7 +20,6 @@ function ProductsList({ setActiveTab }) {
     setSelectedId(id);
     setIsOpen(true);
   };
-
   const closeModal = () => {
     setIsOpen(false);
     setSelectedId(null);
@@ -43,6 +45,7 @@ function ProductsList({ setActiveTab }) {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "space-around",
+      padding: "2rem",
     },
   };
 
@@ -55,9 +58,7 @@ function ProductsList({ setActiveTab }) {
   const [company, setCompany] = useState("");
 
   const companies = products.reduce((list, product) => {
-    if (!list.includes(product.company)) {
-      list.push(product.company);
-    }
+    if (!list.includes(product.company)) list.push(product.company);
     return list;
   }, []);
 
@@ -66,6 +67,71 @@ function ProductsList({ setActiveTab }) {
       product.name.toLowerCase().includes(search.toLowerCase()) &&
       (company == "" || product.company == company),
   );
+
+  // Refs for cards (scroll + filter animations)
+  const cardsRef = useRef([]);
+  cardsRef.current = [];
+  const addToRefs = (el) => {
+    if (el && !cardsRef.current.includes(el)) {
+      cardsRef.current.push(el);
+    }
+  };
+
+  // Animate cards on scroll
+  useEffect(() => {
+    cardsRef.current.forEach((card) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    });
+  }, [filteredProducts]);
+
+  // Modal animation ref
+  const modalRef = useRef(null);
+  useEffect(() => {
+    if (modalIsOpen && modalRef.current) {
+      gsap.fromTo(
+        modalRef.current,
+        { scale: 0.9, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.25, ease: "power2.out" },
+      );
+    }
+  }, [modalIsOpen]);
+
+  // Button hover animation
+  const animateHover = (e) => {
+    gsap.to(e.currentTarget, {
+      scale: 1.05,
+      duration: 0.2,
+      ease: "power1.out",
+    });
+  };
+  const animateHoverOut = (e) => {
+    gsap.to(e.currentTarget, { scale: 1, duration: 0.2, ease: "power1.out" });
+  };
+
+  // Button click animation
+  const animateClick = (e) => {
+    gsap.to(e.currentTarget, {
+      scale: 0.95,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 1,
+      ease: "power1.inOut",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 lg:p-10 text-slate-900">
@@ -81,8 +147,13 @@ function ProductsList({ setActiveTab }) {
             </p>
           </div>
           <button
-            onClick={() => setActiveTab("add")}
-            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+            onMouseEnter={animateHover}
+            onMouseLeave={animateHoverOut}
+            onClick={(e) => {
+              animateClick(e);
+              setActiveTab("add");
+            }}
+            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg hover:bg-slate-800 transition-all"
           >
             + Add New Product
           </button>
@@ -121,6 +192,7 @@ function ProductsList({ setActiveTab }) {
           {filteredProducts.map((p) => (
             <div
               key={p.id}
+              ref={addToRefs}
               className="group flex flex-col lg:flex-row rounded-3xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-sky-200"
             >
               {/* Image */}
@@ -128,7 +200,7 @@ function ProductsList({ setActiveTab }) {
                 <img
                   src={p.image}
                   alt={p.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-400 ease-out group-hover:scale-105 group-hover:brightness-90"
                 />
               </div>
 
@@ -150,17 +222,25 @@ function ProductsList({ setActiveTab }) {
 
                 <div className="flex gap-4 pt-6 border-t border-slate-100">
                   <button
-                    onClick={() => {
+                    onMouseEnter={animateHover}
+                    onMouseLeave={animateHoverOut}
+                    onClick={(e) => {
+                      animateClick(e);
                       setEditIndex(p.id);
                       setActiveTab("edit");
                     }}
-                    className="flex-1 py-4 px-6 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98]"
+                    className="flex-1 py-4 px-6 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all"
                   >
                     Edit Details
                   </button>
                   <button
-                    onClick={() => openModal(p.id)}
-                    className="flex-1 py-4 px-6 border border-red-100 text-red-500 rounded-xl font-bold hover:bg-red-50 transition-all active:scale-[0.98]"
+                    onMouseEnter={animateHover}
+                    onMouseLeave={animateHoverOut}
+                    onClick={(e) => {
+                      animateClick(e);
+                      openModal(p.id);
+                    }}
+                    className="flex-1 py-4 px-6 border border-red-100 text-red-500 rounded-xl font-bold hover:bg-red-50 transition-all"
                   >
                     Remove
                   </button>
@@ -170,6 +250,7 @@ function ProductsList({ setActiveTab }) {
           ))}
         </div>
 
+        {/* Modal */}
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
@@ -177,39 +258,58 @@ function ProductsList({ setActiveTab }) {
           shouldCloseOnOverlayClick={false}
           shouldCloseOnEsc={true}
         >
-          <IoIosWarning className="text-yellow-400" size={50} />
-          <h2 className="text-center text-xl">
-            Are you sure? <br />
-            You want to delete it?
-          </h2>
-          <div className="w-full h-15 flex flex-row items-center justify-around">
-            <button
-              onClick={closeModal}
-              className="border border-gray-300 font-bold hover:bg-gray-100 transition-all duration-100 w-60 h-10 rounded-md"
-            >
-              No, Cancel
-            </button>
-            <button
-              onClick={() => {
-                handleDelete(selectedId);
-                closeModal();
-              }}
-              className="bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all duration-100 border-0 w-60 h-10 rounded-md"
-            >
-              Yes, Delete it
-            </button>
+          <div
+            ref={modalRef}
+            className="w-full h-full flex flex-col items-center justify-around"
+          >
+            <IoIosWarning className="text-yellow-400" size={50} />
+            <h2 className="text-center text-xl">
+              Are you sure? <br />
+              You want to delete it?
+            </h2>
+            <div className="w-full h-15 flex flex-row items-center justify-around mt-4">
+              <button
+                onMouseEnter={animateHover}
+                onMouseLeave={animateHoverOut}
+                onClick={(e) => {
+                  animateClick(e);
+                  closeModal();
+                }}
+                className="border border-gray-300 font-bold hover:bg-gray-100 transition-all duration-100 w-60 h-10 rounded-md"
+              >
+                No, Cancel
+              </button>
+              <button
+                onMouseEnter={animateHover}
+                onMouseLeave={animateHoverOut}
+                onClick={(e) => {
+                  animateClick(e);
+                  handleDelete(selectedId);
+                  closeModal();
+                }}
+                className="bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all duration-100 border-0 w-60 h-10 rounded-md"
+              >
+                Yes, Delete it
+              </button>
+            </div>
           </div>
         </Modal>
 
+        {/* Empty State */}
         {filteredProducts.length == 0 && (
           <div className="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200">
             <p className="text-2xl font-medium text-slate-400">
               No products found matching your criteria.
             </p>
             <button
-              onClick={() => {
-                setSearch("");
-                setCompany("");
+              onMouseEnter={animateHover}
+              onMouseLeave={animateHoverOut}
+              onClick={(e) => {
+                {
+                  animateClick(e);
+                  setSearch("");
+                  setCompany("");
+                }
               }}
               className="mt-4 text-sky-600 font-bold hover:underline"
             >
