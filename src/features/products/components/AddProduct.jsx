@@ -13,19 +13,20 @@ function AddProduct({ setActiveTab }) {
 
   const { addProduct } = useProducts();
 
-  const submit = (data) => {
-    const newProduct = {
-      ...data,
-      id: Math.floor(Math.random() * 9000), // same ID logic as AddCustomer
-    };
+ const submit = (data) => {
+  addProduct({
+    name: data.name,
+    company: data.company,
+    category: data.category,
+    unit: data.unit,
+    image: data.image || "",
+  });
 
-    addProduct(newProduct);
+  toast.success(`Product "${data.name}" added successfully!`);
+  reset();
+  setActiveTab("list");
+};
 
-    toast.success(`Product "${data.name}" added successfully!`);
-
-    reset();
-    setActiveTab("list");
-  };
 
   const cancel = () => setActiveTab("list");
 
@@ -40,7 +41,8 @@ function AddProduct({ setActiveTab }) {
         <form onSubmit={handleSubmit(submit)} className="space-y-10">
           {/* FORM GRID */}
           <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              
               {/* Category */}
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
@@ -77,7 +79,9 @@ function AddProduct({ setActiveTab }) {
                   className="w-full px-5 py-4 border border-slate-300 rounded-xl bg-slate-50 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
 
@@ -93,24 +97,43 @@ function AddProduct({ setActiveTab }) {
                   className="w-full px-5 py-4 border border-slate-300 rounded-xl bg-slate-50 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none"
                 />
                 {errors.unit && (
-                  <p className="text-red-500 text-sm">{errors.unit.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.unit.message}
+                  </p>
                 )}
               </div>
 
-              {/* IMAGE — FULL WIDTH */}
-              <div className="space-y-2 lg:col-span-3">
+              {/* Company */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+                  Company
+                </label>
+                <input
+                  {...register("company", {
+                    required: "Company is required",
+                  })}
+                  type="text"
+                  placeholder="Apple, Samsung, Sony"
+                  className="w-full px-5 py-4 border border-slate-300 rounded-xl bg-slate-50 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none"
+                />
+                {errors.company && (
+                  <p className="text-red-500 text-sm">
+                    {errors.company.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Image - full width */}
+              <div className="space-y-2 lg:col-span-4">
                 <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
                   Image (optional)
                 </label>
-                <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-10 bg-slate-50 hover:bg-slate-100 transition">
-                  <input
-                    {...register("image")}
-                    type="text"
-                    placeholder="Image URL"
-                    className="w-full px-5 py-4 border rounded-xl bg-slate-50"
-                  />
-                
-                </div>
+                <input
+                  {...register("image")}
+                  type="text"
+                  placeholder="Image URL"
+                  className="w-full px-5 py-4 border border-slate-300 rounded-xl bg-slate-50"
+                />
               </div>
             </div>
           </div>
@@ -123,6 +146,7 @@ function AddProduct({ setActiveTab }) {
             >
               Add Product
             </button>
+
             <button
               type="button"
               onClick={cancel}
