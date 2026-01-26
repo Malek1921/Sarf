@@ -25,13 +25,14 @@ function Purchases() {
           active={activeTab === "edit"}
           onClick={() => setActiveTab("edit")}
         />
+        {/* Remove Edit tab from navigation - it should only be accessible via Edit button */}
       </div>
 
       {/* Content */}
       <div className="bg-white rounded-xl shadow p-6">
-        {activeTab === "list" && <PurchaseList />}
-        {activeTab === "add" && <AddPurchase />}
-        {activeTab === "edit" && <EditPurchase />}
+        {activeTab === "list" && <PurchaseList setActiveTab={setActiveTab} />}
+        {activeTab === "add" && <AddPurchase setActiveTab={setActiveTab} />}
+        {activeTab === "edit" && <EditPurchase setActiveTab={setActiveTab} />}
       </div>
     </div>
   );
