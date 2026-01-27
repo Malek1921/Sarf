@@ -5,6 +5,7 @@ import Products from "../products/pages/Products";
 import Customers from "../customers/pages/Customers";
 import Companies from "../companies/pages/Companies";
 import Employees from "../employees/pages/Employees";
+import Dashboard from "../dashboard/pages/DashboardLayout";
 import Login from "../auth/Login";
 
 function ProjectRoutes() {
@@ -18,6 +19,7 @@ function ProjectRoutes() {
         <Route path="/customers" element={<Customers />} />
         <Route path="/companies" element={<Companies />} />
         <Route path="/employees" element={<Employees />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );
