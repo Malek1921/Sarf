@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 function AddEmployee({ setActiveTab }) {
   const [step, setStep] = useState(1);
   const [step1Data, setStep1Data] = useState(null);
-  
+
   const {
     register,
     handleSubmit,
@@ -34,7 +34,7 @@ function AddEmployee({ setActiveTab }) {
     setStep(2);
   };
 
-  const onErrorStep1 = (errors) => {
+  const onErrorStep1 = () => {
     toast.error("Please fill in all required fields correctly");
   };
 
@@ -57,7 +57,7 @@ function AddEmployee({ setActiveTab }) {
     setActiveTab("list");
   };
 
-  const onErrorStep2 = (errors) => {
+  const onErrorStep2 = () => {
     toast.error("Please fill in all required fields correctly");
   };
 
@@ -71,12 +71,48 @@ function AddEmployee({ setActiveTab }) {
   return (
     <div className="w-full px-6 py-10">
       <div className="max-w-full mx-auto">
+        {/* Step Progress Bar */}
+        <div className="w-full mb-10">
+          <div className="flex items-center gap-4">
+            {/* Step 1 Line */}
+            <div className="flex-1">
+              <div
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  step >= 1 ? "bg-slate-800" : "bg-slate-200"
+                }`}
+              />
+            </div>
+
+            {/* Step 2 Line */}
+            <div className="flex-1">
+              <div
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  step === 2 ? "bg-yellow-400" : "bg-slate-200"
+                }`}
+              />
+            </div>
+          </div>
+
+          {/* Step Labels */}
+          <div className="flex justify-between mt-3 text-sm font-semibold">
+            <span className={step >= 1 ? "text-slate-900" : "text-slate-400"}>
+              Step 1: Account Info
+            </span>
+            <span className={step === 2 ? "text-yellow-500" : "text-slate-400"}>
+              Step 2: Permissions
+            </span>
+          </div>
+        </div>
+
         <div className="mb-10 border-b border-slate-200 pb-6">
           <h2 className="text-3xl font-bold text-slate-800">Add Employee</h2>
         </div>
 
         {step === 1 ? (
-          <form onSubmit={handleSubmit(submitStep1, onErrorStep1)} className="space-y-8">
+          <form
+            onSubmit={handleSubmit(submitStep1, onErrorStep1)}
+            className="space-y-8"
+          >
             <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
@@ -88,7 +124,9 @@ function AddEmployee({ setActiveTab }) {
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
 
@@ -97,18 +135,20 @@ function AddEmployee({ setActiveTab }) {
                   Email
                 </label>
                 <input
-                  {...register("email", { 
+                  {...register("email", {
                     required: "Email is required",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address"
-                    }
+                      message: "Invalid email address",
+                    },
                   })}
                   type="email"
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
@@ -117,12 +157,16 @@ function AddEmployee({ setActiveTab }) {
                   Password
                 </label>
                 <input
-                  {...register("password", { required: "Password is required" })}
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
                   type="password"
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
 
@@ -131,27 +175,41 @@ function AddEmployee({ setActiveTab }) {
                   Password Confirmation
                 </label>
                 <input
-                  {...register("passwordConfirmation", { required: "Password confirmation is required" })}
+                  {...register("passwordConfirmation", {
+                    required: "Password confirmation is required",
+                  })}
                   type="password"
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.passwordConfirmation && (
-                  <p className="text-red-500 text-sm mt-2">{errors.passwordConfirmation.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.passwordConfirmation.message}
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="flex gap-6">
-              <button type="submit" className="flex-1 bg-slate-900 text-white py-5 rounded-xl">
-                Submit
+              <button
+                type="submit"
+                className="flex-1 bg-slate-900 text-white py-5 rounded-xl"
+              >
+                Next Step
               </button>
-              <button type="button" onClick={cancel} className="flex-1 bg-white border py-5 rounded-xl">
+              <button
+                type="button"
+                onClick={cancel}
+                className="flex-1 bg-white border py-5 rounded-xl"
+              >
                 Cancel
               </button>
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSubmit(submitStep2, onErrorStep2)} className="space-y-8">
+          <form
+            onSubmit={handleSubmit(submitStep2, onErrorStep2)}
+            className="space-y-8"
+          >
             <div className="bg-white rounded-2xl border border-slate-200 p-10 shadow-sm space-y-8">
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
@@ -163,7 +221,9 @@ function AddEmployee({ setActiveTab }) {
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
 
@@ -172,12 +232,16 @@ function AddEmployee({ setActiveTab }) {
                   Lastname
                 </label>
                 <input
-                  {...register("lastname", { required: "Lastname is required" })}
+                  {...register("lastname", {
+                    required: "Lastname is required",
+                  })}
                   type="text"
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.lastname && (
-                  <p className="text-red-500 text-sm mt-2">{errors.lastname.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.lastname.message}
+                  </p>
                 )}
               </div>
 
@@ -186,7 +250,9 @@ function AddEmployee({ setActiveTab }) {
                   Permissions
                 </label>
                 <select
-                  {...register("permissions", { required: "Permissions is required" })}
+                  {...register("permissions", {
+                    required: "Permissions is required",
+                  })}
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 >
                   <option value="">Select Permissions</option>
@@ -196,7 +262,9 @@ function AddEmployee({ setActiveTab }) {
                   <option value="Admin">Admin</option>
                 </select>
                 {errors.permissions && (
-                  <p className="text-red-500 text-sm mt-2">{errors.permissions.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.permissions.message}
+                  </p>
                 )}
               </div>
 
@@ -216,27 +284,36 @@ function AddEmployee({ setActiveTab }) {
                   Email
                 </label>
                 <input
-                  {...register("email", { 
+                  {...register("email", {
                     required: "Email is required",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address"
-                    }
+                      message: "Invalid email address",
+                    },
                   })}
                   type="email"
                   className="w-full px-6 py-4 border rounded-xl bg-slate-50 text-lg"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="flex gap-6">
-              <button type="submit" className="flex-1 bg-slate-900 text-white py-5 rounded-xl">
+              <button
+                type="submit"
+                className="flex-1 bg-slate-900 text-white py-5 rounded-xl"
+              >
                 Add Employee
               </button>
-              <button type="button" onClick={cancel} className="flex-1 bg-white border py-5 rounded-xl">
+              <button
+                type="button"
+                onClick={cancel}
+                className="flex-1 bg-white border py-5 rounded-xl"
+              >
                 Cancel
               </button>
             </div>

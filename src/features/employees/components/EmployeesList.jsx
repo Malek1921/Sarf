@@ -8,8 +8,8 @@ function EmployeesList({ setActiveTab }) {
   const { setEditIndex } = useEditIndex();
 
   const [filters, setFilters] = useState({
-    name: "",
-    lastname: "",
+    fullname: "",
+    position: "",
   });
 
   const handleDelete = (id, name, lastname) => {
@@ -47,11 +47,15 @@ function EmployeesList({ setActiveTab }) {
   };
 
   const filteredEmployees = employees.filter((e) => {
+    const fullName = `${e.name || ""} ${e.lastname || ""}`.toLowerCase();
+
     return (
-      (filters.name === "" ||
-        e.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-      (filters.lastname === "" ||
-        e.lastname.toLowerCase().includes(filters.lastname.toLowerCase()))
+      (filters.fullname === "" ||
+        fullName.includes(filters.fullname.toLowerCase())) &&
+      (filters.position === "" ||
+        (e.permissions || e.position || "")
+          .toLowerCase()
+          .includes(filters.position.toLowerCase()))
     );
   });
 
@@ -75,41 +79,46 @@ function EmployeesList({ setActiveTab }) {
           </button>
         </div>
 
+        {/* Filters */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
-              First Name
+              Full Name
             </label>
             <input
               type="text"
-              value={filters.name}
-              onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+              value={filters.fullname}
+              onChange={(e) =>
+                setFilters({ ...filters, fullname: e.target.value })
+              }
+              placeholder="Search by full name"
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl"
             />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
-              Last Name
+              Position
             </label>
             <input
               type="text"
-              value={filters.lastname}
+              value={filters.position}
               onChange={(e) =>
-                setFilters({ ...filters, lastname: e.target.value })
+                setFilters({ ...filters, position: e.target.value })
               }
+              placeholder="Search by position"
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl"
             />
           </div>
         </div>
 
+        {/* Table */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 text-slate-500 uppercase text-xs font-black tracking-widest">
-                  <th className="px-6 py-5">Name</th>
-                  <th className="px-6 py-5">Lastname</th>
-                  <th className="px-6 py-5">Permissions</th>
+                  <th className="px-6 py-5">Full Name</th>
+                  <th className="px-6 py-5">Position</th>
                   <th className="px-6 py-5">Phone</th>
                   <th className="px-6 py-5">Email</th>
                   <th className="px-6 py-5 text-right">Actions</th>
@@ -117,12 +126,15 @@ function EmployeesList({ setActiveTab }) {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredEmployees.map((e) => (
-                  <tr key={e.id}>
-                    <td className="px-6 py-5">{e.name}</td>
-                    <td className="px-6 py-5">{e.lastname}</td>
-                    <td className="px-6 py-5">{e.permissions || e.position || "N/A"}</td>
+                  <tr key={e.id} className="hover:bg-slate-50 transition">
+                    <td className="px-6 py-5 font-semibold text-slate-900">
+                      {e.name} {e.lastname}
+                    </td>
+                    <td className="px-6 py-5">
+                      {e.permissions || e.position || "N/A"}
+                    </td>
                     <td className="px-6 py-5">{e.phone || "N/A"}</td>
-                    <td className="px-6 py-5">{e.email}</td>
+                    <td className="px-6 py-5 text-slate-700">{e.email}</td>
                     <td className="px-6 py-5 text-right">
                       <button
                         onClick={() => {
@@ -142,6 +154,17 @@ function EmployeesList({ setActiveTab }) {
                     </td>
                   </tr>
                 ))}
+
+                {filteredEmployees.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="text-center px-6 py-10 text-slate-400 font-semibold"
+                    >
+                      No employees found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
